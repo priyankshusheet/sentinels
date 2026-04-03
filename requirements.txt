@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+supabase
+python-dotenv
+httpx
+openai
+google-generativeai
+anthropic
+groq
+pydantic
+pydantic-settings
+praw
+beautifulsoup4
+lxml
