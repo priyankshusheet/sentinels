@@ -1,0 +1,27 @@
+{
+  "name": "sentinels",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/priyankshusheet/sentinels.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/priyankshusheet/sentinels/issues"
+  },
+  "homepage": "https://github.com/priyankshusheet/sentinels#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
