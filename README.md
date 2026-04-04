@@ -808,5 +808,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 <p align="center">
   <strong>Sentinel AI</strong> — Own Your Brand's AI Visibility<br/>
-  Built with ❤️ using React, TypeScript, Supabase & AI
+  Built with Sentinels using React, TypeScript, Supabase & AI
 </p>
