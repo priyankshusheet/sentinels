@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Loader2 } from "lucide-react";
+import { formatPlatformName } from "@/lib/utils";
 
 interface LLMData {
   name: string;
@@ -47,12 +48,15 @@ export function ShareOfVoice() {
       });
 
       const total = rankings?.length || 1;
-      const chartData = Object.entries(counts).map(([name, count]) => ({
-        name,
-        icon: PLATFORM_META[name]?.icon || "🤖",
-        value: Math.round((count / total) * 100),
-        color: PLATFORM_META[name]?.color || "from-gray-400 to-gray-600",
-      })).sort((a, b) => b.value - a.value);
+      const chartData = Object.entries(counts).map(([rawName, count]) => {
+        const name = formatPlatformName(rawName);
+        return {
+          name,
+          icon: PLATFORM_META[name]?.icon || "🤖",
+          value: Math.round((count / total) * 100),
+          color: PLATFORM_META[name]?.color || "from-gray-400 to-gray-600",
+        };
+      }).sort((a, b) => b.value - a.value);
 
       setData(chartData);
       setLoading(false);

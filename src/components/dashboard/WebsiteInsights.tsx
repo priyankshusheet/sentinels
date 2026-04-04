@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Globe, CheckCircle, AlertTriangle, Loader2, ExternalLink, FileText, Search, Code } from "lucide-react";
+import { Globe, CheckCircle, AlertTriangle, Loader2, TrendingUp, Lightbulb, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -37,7 +37,6 @@ export function WebsiteInsights() {
 
   useEffect(() => {
     fetchAnalysis();
-    // Poll if crawling
     const interval = setInterval(() => {
       if (analysis?.status === "crawling" || analysis?.status === "pending") {
         fetchAnalysis();
@@ -89,8 +88,8 @@ export function WebsiteInsights() {
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
-            <Globe className="h-5 w-5 text-white" />
+          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+            <Globe className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
             <h3 className="text-base font-semibold text-foreground">Website Analysis</h3>
@@ -99,7 +98,7 @@ export function WebsiteInsights() {
         </div>
         <div className="flex items-center gap-2">
           {analysis.status === "crawling" || analysis.status === "pending" ? (
-            <div className="flex items-center gap-2 text-xs text-cyan-400">
+            <div className="flex items-center gap-2 text-xs text-primary">
               <Loader2 className="h-4 w-4 animate-spin" />
               Analyzing...
             </div>
@@ -114,7 +113,7 @@ export function WebsiteInsights() {
 
       {analysis.status === "completed" && insights && (
         <>
-          {/* AI Readiness Score */}
+          {/* Metrics */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="rounded-xl bg-secondary/50 p-4 text-center">
               <div className="text-2xl font-bold text-foreground">{insights.ai_readiness || 0}%</div>
@@ -134,16 +133,29 @@ export function WebsiteInsights() {
             </div>
           </div>
 
+          {/* AI Assessment */}
+          {insights.overall_assessment && (
+            <div className="p-4 rounded-xl bg-primary/5 border border-primary/10">
+              <div className="flex items-center gap-2 mb-2">
+                <TrendingUp className="h-4 w-4 text-primary" />
+                <h4 className="text-xs font-bold uppercase tracking-widest text-primary">AI Assessment</h4>
+              </div>
+              <p className="text-sm text-foreground leading-relaxed">{insights.overall_assessment}</p>
+            </div>
+          )}
+
           {/* SEO Signals */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">SEO & AI Signals</h4>
+            <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+              <ShieldCheck className="h-3.5 w-3.5" /> SEO & AI Signals
+            </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {Object.entries(seoSignals).map(([key, value]) => (
                 <div key={key} className="flex items-center gap-2 text-sm">
                   {value ? (
-                    <CheckCircle className="h-4 w-4 text-green-400 shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-500 shrink-0" />
                   ) : (
-                    <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0" />
+                    <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
                   )}
                   <span className={cn("text-xs", value ? "text-foreground" : "text-muted-foreground")}>
                     {key.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
@@ -152,6 +164,55 @@ export function WebsiteInsights() {
               ))}
             </div>
           </div>
+
+          {/* Strengths & Weaknesses */}
+          {(insights.strengths?.length > 0 || insights.weaknesses?.length > 0) && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {insights.strengths?.length > 0 && (
+                <div className="space-y-2">
+                  <h4 className="text-xs font-bold uppercase tracking-widest text-green-500">Strengths</h4>
+                  <ul className="space-y-1">
+                    {insights.strengths.slice(0, 3).map((s: string, i: number) => (
+                      <li key={i} className="text-xs text-foreground flex items-start gap-2">
+                        <CheckCircle className="h-3 w-3 text-green-500 shrink-0 mt-0.5" />
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {insights.weaknesses?.length > 0 && (
+                <div className="space-y-2">
+                  <h4 className="text-xs font-bold uppercase tracking-widest text-amber-500">Weaknesses</h4>
+                  <ul className="space-y-1">
+                    {insights.weaknesses.slice(0, 3).map((w: string, i: number) => (
+                      <li key={i} className="text-xs text-foreground flex items-start gap-2">
+                        <AlertTriangle className="h-3 w-3 text-amber-500 shrink-0 mt-0.5" />
+                        {w}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Recommendations */}
+          {insights.recommendations?.length > 0 && (
+            <div className="space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                <Lightbulb className="h-3.5 w-3.5" /> AI Recommendations
+              </h4>
+              <div className="space-y-2">
+                {insights.recommendations.slice(0, 4).map((r: string, i: number) => (
+                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-secondary/30 border border-border">
+                    <span className="text-xs font-bold text-primary mt-0.5">{i + 1}.</span>
+                    <p className="text-xs text-foreground leading-relaxed">{r}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Key Topics */}
           {insights.key_topics?.length > 0 && (
@@ -176,6 +237,9 @@ export function WebsiteInsights() {
             <p className="text-sm font-medium text-destructive">Analysis failed</p>
             <p className="text-xs text-muted-foreground">Try re-analyzing or check if the website URL is accessible.</p>
           </div>
+          <Button variant="outline" size="sm" onClick={handleRecrawl} disabled={recrawling} className="ml-auto text-xs">
+            Retry
+          </Button>
         </div>
       )}
     </motion.div>
