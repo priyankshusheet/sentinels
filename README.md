@@ -75,7 +75,7 @@ The system demonstrates that proactive AI visibility management can significantl
 
 ## Acknowledgement
 
-We express our sincere gratitude to all contributors, mentors, and advisors who guided the development of the Sentinel AI platform. Special thanks to the open-source communities behind React, Supabase, Tailwind CSS, and the various AI model providers whose APIs and documentation made this project possible. We also acknowledge the invaluable feedback from early adopters and beta testers who helped shape the product direction.
+We express our sincere gratitude to all the contributors, mentors, and advisors who guided the development of the Sentinel AI platform. Special thanks to the open-source communities behind React, Supabase, Tailwind CSS, and the various AI model providers whose APIs and documentation made this project possible. We also acknowledge the invaluable feedback from early adopters and beta testers who helped shape the product direction.
 
 ---
 
